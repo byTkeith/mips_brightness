@@ -17,36 +17,37 @@
         li $a1, 0              #reads e the file 
         li $a2, 0             
         syscall
-    # Check if the file was opened successfully
-        bnez $v0, file_opened
 
-        # If the file could not be opened, exit
-        li $v0, 10             # Load syscall code for "exit" (10)
+    
+        bnez $v0, fileAccessed  # Checks if e file was opened 
+
+        
+        li $v0, 10    #exit If the file not  opened       
         syscall  
 
-    file_opened:
-        move $s0, $v0          # Save file descriptor to $s0
+    fileAccessed:
+        move $s0, $v0          #Saves file to $s0
 
-        # Open the new file for writing
-        li $v0, 13             # Load syscall code for "open" (13)
+        # Open the new file for writing with 13
+        li $v0, 13             
         la $a0, output_file  # Load the address of the new file name
-        li $a1, 1              # Flag: write mode
-        li $a2, 0              # File permission (ignored in write mode)
+        li $a1, 1              # writing to file 
+        li $a2, 0             
         syscall
 
-        # Check if the file was opened successfully
-        bnez $v0, new_file_opened
+        # Check of access made to file 
+        bnez $v0, new_fileAccessed
 
-        # If the file could not be opened, close the original file and exit
-        li $v0, 16             # Load syscall code for "close" (16)
-        move $a0, $s0          # Pass file descriptor of the original file
+        # syscall 16 closes thefile
+        li $v0, 16            
+        move $a0, $s0         
         syscall
 
-        li $v0, 10             # Load syscall code for "exit" (10)
+        li $v0, 10             #exit
         syscall
 
-    new_file_opened:
-        move $s1, $v0          # Save file descriptor to $s1
+    new_fileAccessed:
+        move $s1, $v0          # Saving the file $s1
 
         # Read the PPM header (3 lines)
         li $t0, 0              # Initialize a counter
