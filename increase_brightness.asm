@@ -127,46 +127,56 @@
         calculate_averages:
             beq $t1, $t2, display_averages  # If the image_width pointer reaches the end, calculate and display averages
 
-            # Calculate the sum of RGB values in the original image
+            #calculate the sum of RGB values in the original image
             lb $t9, -3($t1)        
             lb $t10, -2($t1)       
             lb $t11, -1($t1)       
 
             add $t7, $t7, $t9      # Add R component to the total for original image
-            add $t7, $t7, $t10     # Add G component to the total for original image
-            add $t7, $t7, $t11     # Add B component to the total for original image
+            add $t7, $t7, $t10     #G 
+            add $t7, $t7, $t11     #B 
 
-            # Calculate the sum of RGB values in the new image
-            lb $t12, -3($t1)       # Load the modified R component
-            lb $t13, -2($t1)       # Load the modified G component
-            lb $t14, -1($t1)       # Load the modified B component
+            #calculate the sum of RGB values in the new image
+            lb $t12, -3($t1)       
+            lb $t13, -2($t1)       
+            lb $t14, -1($t1)       #load the modified B 
 
-            add $t8, $t8, $t12     # Add modified R component to the total for new image
-            add $t8, $t8, $t13     # Add modified G component to the total for new image
-            add $t8, $t8, $t14     # Add modified B component to the total for new image
+            add $t8, $t8, $t12     
+            add $t8, $t8, $t13     
+            add $t8, $t8, $t14     
 
-            addi $t1, $t1, 3       # Move image_width pointer to the next pixel
+            addi $t1, $t1, 3       #move image_width pointer to the next pixel
             j calculate_averages
 
         display_averages:
-            # Calculate the number of pixels
+            # Calculate the pixel
             div $t2, $t7
-            mflo $f0               # Store the result in $f0
+            mflo $f0               # store in $f0
+
+            #prints out the original value prompt
+            li $v0, 4
+            la $a0, originalPrompt
+            syscall
 
             # Display the average pixel value of the original image
-            li $v0, 2              # Load syscall code for "print float" (2)
+            li $v0, 2              
             syscall
 
             # Calculate the number of pixels
             div $t2, $t8
-            mflo $f0               # Store the result in $f0
+            mflo $f0               #store in $f0
 
-            # Display the average pixel value of the new image
-            li $v0, 2              # Load syscall code for "print float" (2)
+            #prints out the final value prompt
+            li $v0, 4
+            la $a0, finalPrompt
             syscall
 
-        # Exit the program
-        li $v0, 10             # Load syscall code for "exit" (10)
+            # Display the average pixel value of the new image
+            li $v0, 2              
+            syscall
+
+        #exit 
+        li $v0, 10             
         syscall
 
 
