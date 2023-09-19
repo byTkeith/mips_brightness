@@ -36,7 +36,7 @@
         syscall
 
         # Check of access made to file 
-        bnez $v0, new_fileAccessed
+        bnez $v0, file_to_operate
 
         # syscall 16 closes thefile
         li $v0, 16            
@@ -46,10 +46,10 @@
         li $v0, 10             #exit
         syscall
 
-    new_fileAccessed:
+    file_to_operate:
         move $s1, $v0          # Saving the file $s1
 
-        # Read the PPM header (3 lines)
+        #reads the 3 lines
         li $t0, 0              # Initialize a counter
         la $t1, image_width         # Load the address of the image_width
 
