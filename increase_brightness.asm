@@ -67,53 +67,53 @@
     readPixels:
         li $t2, 0              #Initialize the counter for the number of pixels to zeo
 
-    read_pixel_loop:
-        beq $t2, 512, write_new_image # If 512 pixels are read, proceed to write the new image
+    readPixels_loop:
+        beq $t2, 512, create_image #If 512 pixels ar reached, proceed to write the new image
 
-        # Read a pixel (3 RGB values)
-        li $v0, 14             # Load syscall code for "read" (14)
-        move $a0, $s0          # Original file descriptor
-        move $a1, $t1          # Destination image_width
-        li $a2, 3              # Read 3 bytes (RGB values)
+        # Read a 3 RGB values
+        li $v0, 14            
+        move $a0, $s0         
+        move $a1, $t1         
+        li $a2, 3              #read 3 bytes (RGB values)
         syscall
 
         # Increment image_width pointer
         addi $t1, $t1, 3
 
         # Calculate new RGB values with a cap at 255
-        lb $t3, -3($t1)        # Load the R component
-        lb $t4, -2($t1)        # Load the G component
-        lb $t5, -1($t1)        # Load the B component
+        lb $t3, -3($t1)        #for R component
+        lb $t4, -2($t1)        # "  G component
+        lb $t5, -1($t1)        # "  B component
 
-        addi $t3, $t3, 10      # Increase R by 10
-        addi $t4, $t4, 10      # Increase G by 10
-        addi $t5, $t5, 10      # Increase B by 10
+        addi $t3, $t3, 10      # Increments R by 10
+        addi $t4, $t4, 10      #     "      G by 10
+        addi $t5, $t5, 10      #     "      B by 10
 
         # Check for cap at 255
-        li $t6, 255            # Load 255 into $t6
-        min $t3, $t3, $t6      # Cap R at 255
-        min $t4, $t4, $t6      # Cap G at 255
-        min $t5, $t5, $t6      # Cap B at 255
+        li $t6, 255            # Load 255 into $t6 so we can check if its exceeded
+        min $t3, $t3, $t6      # max  R at 255
+        min $t4, $t4, $t6      #  "  G at 255
+        min $t5, $t5, $t6      #   "   B at 255
 
         # Write the new RGB values
-        sb $t3, -3($t1)        # Write the new R component
-        sb $t4, -2($t1)        # Write the new G component
-        sb $t5, -1($t1)        # Write the new B component
+        sb $t3, -3($t1)        #the new R component
+        sb $t4, -2($t1)        #the new G component
+        sb $t5, -1($t1)        #the new B component
 
         # Increment the pixel counter
         addi $t2, $t2, 1
-        b read_pixel_loop
+        b readPixels_loop
 
-    write_new_image:
+    create_image:
         # Write the modified image to the new file
-        li $v0, 15             # Load syscall code for "write" (15)
-        move $a0, $s1          # New file descriptor
+        li $v0, 15             # syscall code for write
+        move $a0, $s1         
         la $a1, image_width         # Source image_width
-        li $a2, 512            # Write up to 512 characters
+        li $a2, 512            
         syscall
 
         # Close both files
-        li $v0, 16             # Load syscall code for "close" (16)
+        li $v0, 16             # Load syscall code for close
         move $a0, $s0          # Original file descriptor
         syscall
         move $a0, $s1          # New file descriptor
