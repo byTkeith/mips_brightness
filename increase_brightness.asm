@@ -121,7 +121,7 @@
 
         # Calculate and display the average pixel values
         li $t7, 0              #counter for  the original image
-        li $t8, 0              # Initialize a counter for the total RGB values in the new image
+        li $t8, 0              # counter for  RGB values in the new image
         la $t1, image_width         # Reset the image_width pointer
 
         calculate_averages:
