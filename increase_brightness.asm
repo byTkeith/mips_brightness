@@ -116,7 +116,7 @@
         li $v0, 16             # Load syscall code for close
         move $a0, $s0          # Original file descriptor
         syscall
-        move $a0, $s1          # New file descriptor
+        move $a0, $s1          
         syscall
 
         # Calculate and display the average pixel values
