@@ -54,18 +54,18 @@
         la $t1, image_width         # Load the address of the image_width
 
     read_header_loop:
-        beq $t0, 3, read_pixels # If 3 lines are read, proceed to read pixels
-        li $v0, 14             # Load syscall code for "read" (14)
-        move $a0, $s0          # Original file descriptor
-        move $a1, $t1          # Destination image_width
-        li $a2, 512            # Read up to 512 characters
+        beq $t0, 3, readPixels # If 3 lines are read, proceed to read pixels
+        li $v0, 14             #load syscall code for reading
+        move $a0, $s0         
+        move $a1, $t1          #destination image_width
+        li $a2, 512            #read up to 512 characters
         syscall
-        addi $t0, $t0, 1       # Increment the counter
-        addi $t1, $t1, 512     # Move image_width pointer to the next position
+        addi $t0, $t0, 1       #increment the counter
+        addi $t1, $t1, 512     #move image_width pointer to the next position
         b read_header_loop
 
-    read_pixels:
-        li $t2, 0              # Initialize a counter for the number of pixels
+    readPixels:
+        li $t2, 0              #Initialize the counter for the number of pixels to zeo
 
     read_pixel_loop:
         beq $t2, 512, write_new_image # If 512 pixels are read, proceed to write the new image
