@@ -122,15 +122,15 @@
         # Calculate and display the average pixel values
         li $t7, 0              #counter for  the original image
         li $t8, 0              # counter for  RGB values in the new image
-        la $t1, image_width         # Reset the image_width pointer
+        la $t1, image_width  
 
         calculate_averages:
             beq $t1, $t2, display_averages  # If the image_width pointer reaches the end, calculate and display averages
 
             # Calculate the sum of RGB values in the original image
-            lb $t9, -3($t1)        # Load the R component
-            lb $t10, -2($t1)       # Load the G component
-            lb $t11, -1($t1)       # Load the B component
+            lb $t9, -3($t1)        
+            lb $t10, -2($t1)       
+            lb $t11, -1($t1)       
 
             add $t7, $t7, $t9      # Add R component to the total for original image
             add $t7, $t7, $t10     # Add G component to the total for original image
