@@ -91,10 +91,15 @@
 
         # Check for cap at 255
         li $t6, 255            # Load 255 into $t6 so we can check if its exceeded
-        min $t3, $t3, $t6      # max  R at 255
-        min $t4, $t4, $t6      #  "  G at 255
-        min $t5, $t5, $t6      #   "   B at 255
+        ble $t3, $t6, clamp_point
+        li $t3, 255
 
+        ble $t4, $t6, clamp_point
+        li $t4, 255      #  "  G at 255
+
+        ble $t5, $t6, clamp_point      #   "   B at 255
+        li $t5, 255
+    clamp_point:
         # Write the new RGB values
         sb $t3, -3($t1)        #the new R component
         sb $t4, -2($t1)        #the new G component
