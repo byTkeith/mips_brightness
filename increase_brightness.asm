@@ -134,21 +134,21 @@
 
             #calculate the sum of RGB values in the original image
             lb $t9, -3($t1)        
-            lb $t10, -2($t1)       
+            lb $t6, -2($t1)       
             lb $t11, -1($t1)       
 
-            add $t7, $t7, $t9      # Add R component to the total for original image
-            add $t7, $t7, $t10     #G 
+            add $t7, $t7, $t9     # Add R component to the total for original image
+            add $t7, $t7, $t6    #G 
             add $t7, $t7, $t11     #B 
 
             #calculate the sum of RGB values in the new image
             lb $t12, -3($t1)       
             lb $t13, -2($t1)       
-            lb $t14, -1($t1)       #load the modified B 
+            lb $t15, -1($t1)       #load the modified B 
 
             add $t8, $t8, $t12     
             add $t8, $t8, $t13     
-            add $t8, $t8, $t14     
+            add $t8, $t8, $t15     
 
             addi $t1, $t1, 3       #move image_width pointer to the next pixel
             j calculate_averages
