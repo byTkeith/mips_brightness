@@ -100,6 +100,58 @@ Second_fileOpened:
             li $a2, 1      #read one byte at a time
             syscall
 
+        #check for a 255 cap
+        beq $t3, 255, cap_R
+        beq $t4, 255, cap_g
+        beq $t5, 255, cap_b
+
+        #increment by 10
+        addi $t3, $t3, 10
+        addi $t4, $t4, 10
+        addi $t5, $t5, 10
+
+        j updateIcrement
+
+    cap_R:
+        li $t3, 255
+
+        j updateIcrement
+
+    cap_g:
+        li $t4, 255
+
+        j updateIcrement
+
+    cap_R:
+        li $t5, 255
+
+        j updateIcrement
+   
+    updateIcrement:
+        #write updated values to output file
+        li $v0, 15
+        move $a0, $s1
+        sb $t3, 0($a1)
+        li $a2, 1
+        syscall
+
+        li $v0, 15
+        move $a0, $s1
+        sb $t4, 0($a1)
+        li $a2, 1
+        syscall
+
+        li $v0, 15
+        move $a0, $s1
+        sb $t5, 0($a1)
+        li $a2, 1
+        syscall
+
+
+
+
+
+
 
 exit:
     li $v0,10
