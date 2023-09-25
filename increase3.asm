@@ -42,28 +42,31 @@
 
     process_loop:
         lbu $t2, 0($t0) # load byte from buffer into $t2
+        subu $t2, $t2, 48
+        addiu $t2, $t2, 10
        
-    digit_loop:
-        subu $t2, $t2, 48 #ascii to integer
-        mul $t2, $t2, 10 
-        lbu $t3, 0($t0)
-        li $s7, 32 #load ascii value for space into register s7
-        bne $t3, $s7, digit_loop
-        addiu $t0, $t0, 1
-
-
+    #digit_loop:
+        #subu $t2, $t2, 48 #ascii to integer
+        #mul $t2, $t2, 10
+        #li $s7, 32 #load ascii value for space into register s7
+        #addiu $t0, $t0, 1 
+        #lbu $t3, 0($t0)
+        #bne $t3, $s7, digit_loop
+        
+        
     done:
         addiu $t2, $t2, 10 #increase brightness by 10
         
 
     clamp_value:
         sltiu $t3, $t3, 256 #check if les than 255
-        beqz $t3, cap_value 
+        beqz $t3, 
 
     cap_value:
-        li $t2, 255+48 #cap at 255 and convert to ascii
+        li $t2, 255 #cap at 255 
 
     store_value:
+        addiu $t2, $t2, 48 #convert to ascii
         sb $t2, -1($t0) #store into buffer
 
     next_pixel:
