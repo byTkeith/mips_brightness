@@ -57,7 +57,7 @@
         mul $t2, $t2, 10 #shift current one place left
         addiu $t0, $t0, 1 #increment bufer adress by 1
         lbu $t3, 0($t0) #load next byte from buffer
-        bne $t3, 32, digit_loop #if not space or new lines
+        bne $t3, 32, digit_loop 
 
 
     done:
