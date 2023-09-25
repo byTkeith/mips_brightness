@@ -51,6 +51,13 @@
         sb $t2, 0($t0) # store byte back into buffer
 
     digit_loop:
+        subu $t2, $t2, 48 #ascii to integer
+        mul $t2, $t2, 10 
+        addiu $t0, $t0, 1
+        lbu $t3, 0($t0)
+        bne $t3, $t3, digit_loop
+
+        
         lbu $t3, 0($t0)#load byte from buffer to t3
         beqz $t3, done #if byte = null end of string exit loop
         subu $t3, $t3, 48 #convert ascii digit to integer
