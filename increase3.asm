@@ -5,7 +5,7 @@
     input_file:   .asciiz "D:\\arch_ass\\house_64_in_ascii_lf.ppm"    
     output_file: .asciiz "D:\\arch_ass\\Result.ppm" 
     buffer: .space 47434 # buffer to read data into
-    offset: .word 3*64*64+3*3+1 #pixel offset
+    offset: .word 4 #pixel offset
 .globl main
 .text
     main:
