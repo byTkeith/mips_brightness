@@ -44,34 +44,35 @@
         lbu $t2, 0($t0) # load byte from buffer into $t2
         subu $t2, $t2, 48
         addiu $t2, $t2, 10
-       
-    #digit_loop:
-        #subu $t2, $t2, 48 #ascii to integer
-        #mul $t2, $t2, 10
-        #li $s7, 32 #load ascii value for space into register s7
-        #addiu $t0, $t0, 1 
-        #lbu $t3, 0($t0)
-        #bne $t3, $s7, digit_loop
-        
-        
-    done:
-        addiu $t2, $t2, 10 #increase brightness by 10
-        
 
-    clamp_value:
-        sltiu $t3, $t3, 256 #check if les than 255
-        beqz $t3, 
+    clamp_value: 
+        #clamp the value to 255
+        sltiu $t3, $t3, 256
+        beqz $t3, cap_value
+        
 
     cap_value:
-        li $t2, 255 #cap at 255 
+        #convert to ascii then store
+        li $t3, 100
+        div $t2, $t3
+        mflo $t3
+        addiu $t3, $t3, 48
+        sb $t3, -3($t0) #store modified value at same position
 
-    store_value:
-        addiu $t2, $t2, 48 #convert to ascii
-        sb $t2, -1($t0) #store into buffer
+        li $t3, 10
+        rem $t6, $t2, $t3
+        mflo $t3
+
+        addiu $t3, $t3, 48
+        sb $t3, -2($t0) #stored at next position
+
+        mfhi $t2
+        addiu $t2, $t2, 48
+        sb $t2, -1($t0) #store at follow up position
 
     next_pixel:
-        addiu $t1, $t1, -1 #decrement length by one
-        bnez $t1, process_loop #if not zero continue loop
+        addiu $t1, $t1, -1 #decrement length by 3
+        bnez $t1, process_loop #if not zero 0r - continue loop
 
         li $v0, 16
         move $a0, $s6
