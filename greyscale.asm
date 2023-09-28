@@ -3,7 +3,7 @@
 #20/09/2023
 .data 
     input_file:   .asciiz "D:/arch_ass/tree_64_in_ascii_lf.ppm"    
-    output_file: .asciiz "D:/arch_ass/Result_tree.ppm" 
+    output_file: .asciiz "D:/arch_ass/Result_greyscale_tree.ppm" 
     words_buffer: .space 47434
    
     pixel_buffer: .space 47434 #buffer for upadated values
@@ -16,6 +16,7 @@
     HEADER_SIZE: .space 18
 
     newLine: .asciiz "\n"
+    end_prompt: .asciiz "file written"
 .globl main
 .text
     main:
@@ -103,11 +104,11 @@
         j process_loop
 
     end_pointer:
-         add $t5, $t5, $t4
-         move $t4, $zero
-         addi $t1, $t1, 1
-         beq $t1, 3, brunch_three
-         j pixel_loop
+        add $t5, $t5, $t4
+        move $t4, $zero
+        addi $t1, $t1, 1
+        beq $t1, 3, brunch_three
+        j process_loop 
 
     brunch_three:
         move $t1, $zero
@@ -116,9 +117,13 @@
         div $t5, $t5, 3 #to find the average of the numbers
         la $t6, pixel_buffer
         addiu $t6, $t6, 11 #pointer to the lasst pointer
-        sb $zero, 0($t6)
+        sb $zero, 0($t6) #null terminator
 
         jal convert_loop
+
+        move $t8, $zero
+        move $s1, $t6
+        jal maxLength
 
     copy_to_output:
         #write  to output_file
