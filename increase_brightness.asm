@@ -5,13 +5,12 @@
     originalAverage: .asciiz "Average pixel value of the original image:\n"
     finalAverage: .asciiz "Average pixel value of new image:\n"
     
-    input_file:   .asciiz "D:/arch_ass/test.txt"    
-    output_file: .asciiz "D:/arch_ass/Result.ppm" 
-    words_buffer: .asciiz 47434
-    org_buffer: .word 47434 # buffer to read data into
+    input_file:   .asciiz "D:/arch_ass/tree_64_in_ascii_lf.ppm"    
+    output_file: .asciiz "D:/arch_ass/Result_tree.ppm" 
+    words_buffer: .space 47434
+  
     pixel_buffer: .space 47434 #buffer for upadated values
-    outcome: .space 64
-
+   
     float_size: .float 255.0
 
     offset: .word 4 #pixel offset
@@ -45,14 +44,14 @@
 
         li $v0, 14
         move $a0, $s0
-        la $a1, buffer #adresss to read from
+        la $a1, words_buffer #adresss to read from
         li $a2, 47434 #hard coded header size
         syscall
 
         move $s2, $v0 #file descriptor
 
         la $t0, words_buffer #address of buffer
-        li $t5, "\n" # new line
+        li $t5, 10 # new line
         li $t7, '0'
         li $t8, 10 
 
@@ -65,7 +64,8 @@
         #write header to output_file
         li $v0, 15
         move $a0, $s3
-        la $a1, $t0
+        move $a1, $t0
+      
         li $a2, 1 
         syscall
 
@@ -152,8 +152,13 @@
         la $a0, originalAverage
         syscall
 
-        li $vo, 2
+        li $v0, 2
         mov.s $f12, $f4 #to print the float of old values
+        syscall
+        
+        #print new line
+        li $v0, 4
+        la $a0, newLine
         syscall
 
         #print out the new average prompt 
@@ -161,7 +166,7 @@
         la $a0, finalAverage
         syscall
 
-        li $vo, 2
+        li $v0, 2
         mov.s $f12, $f0 #to print the float of old values
         syscall
 
